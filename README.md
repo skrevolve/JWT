@@ -104,12 +104,62 @@ Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 
 ## 인증 방식 비교하기 (Session-Cookie VS Token)
 확장성을 고려한다면 Token 인증     
 두 방식의 차이점을 확장성 측면에서 살펴보겠습니다   
+### Session-Cookie 인증   
 ![sessionCookie1](https://user-images.githubusercontent.com/41939976/89484266-1cd7c800-d7d9-11ea-8988-4d1ede6905f9.png)
+- 확장성 👎   
 - Stateful : 모든 사용자의 인증상태(Session)를 유지하고 있어야 함   
 - Traffic 고려 O: 사용자가 많아지면 Session 저장소가 Traffic을 감당해야 함 (조회, 등록)   
 - 공유 자원 O : Server 증설시 Session 저장소를 공유해야 함   
 
-    
+### Token 인증
+![0_2sni0qf84rLK70SD](https://user-images.githubusercontent.com/41939976/89490823-b8bd0000-d7e8-11ea-8a3d-bfa0c9bc5848.png)
+- 확장성 👍     
+- Stateless : Session 저장소 처럼 사용자의 인증 상태 데이터를 별도 저장소로 유지할 필요가 없음   
+- Traffic 고려 X, 공유 자원 X : 각 Server가 토큰 발급만 잘 해주면 됨   
+
+## 마이크로서비스라면 무조건 JWT!
+### JWT의 핵심
+마이크로서비스에서 JWT로 인증하면 불필요한 인증 과정을 줄여줍니다   
+자세한 내용은 아래의 두 가지 토큰을 비교하며 살펴보겠습니다   
+
+A. Payload가 없는 Token (Opaque Token) 👎   
+B. Payload가 있는 Token (JWT) 👍   
+
+### A. Payload가 없는 Token (Opaque Token)
+아래 그림은 보통 Oauth2.0하면 생각하는 구조입니다   
+![1](https://user-images.githubusercontent.com/41939976/89491104-6d572180-d7e9-11ea-974e-c7f63f84a939.png)
+Resource 서버가 많아지면 Auth 서버가 너무 바빠집니다   
+각각의 Resource 서버가 Token의 유효성, 권한 확인을 Auth 서버에 요청하기 때문입니다(이미 인증했는데…. 낭비…)   
+![2](https://user-images.githubusercontent.com/41939976/89491170-95468500-d7e9-11ea-9d44-80ff19c48bb2.png)
+바쁜 Auth 서버..   
+그래서 Resource 서버가 많은 마이크로서비스에서는 Token만으로 유효성 & 권한 확인이 가능한 JWT가 필요합니다   
+
+### B. Payload가 있는 Token (JWT)   
+JWT를 사용하면 Auth 서버에 매번 요청할 필요가 없습니다   
+JWT에 모든 정보가 포함되어 있기 때문에, 개별 서비스들은 자체적으로 Token의 유효성, 권한 정보를 체크한 후 바로 Resource를 제공합니다    
+![3](https://user-images.githubusercontent.com/41939976/89491266-d343a900-d7e9-11ea-88ab-e303744ce353.png)
+
+## JWT 사용시 주의 할 점   
+### Local Storage에 저장하지 마세요! ❌   
+정말 위험합니다! 아무리 데이터 암호화를 잘 해도 Token이 털리면 아무 의미가 없습니다   
+Local Storage에 저장하면 웹 브라우저에 영구적으로 저장되고, 자바스크립트를 통해 접근 가능하기 때문에 보안(특히 Cross-Site Scripting 공격)에 취약합니다!   
+최소한 메모리에 저장해두세요. (ex. Vue.js로 SPA를 개발했다면 Vuex 사용)   
+### JWT와 Session-Cookie를 모두 사용하기   
+![4](https://user-images.githubusercontent.com/41939976/89491429-3f261180-d7ea-11ea-9aee-43e2cbafe370.png)
+사용자의 서비스 경험을 방해하지 않고 인증을 다시 하는 방식입니다   
+재인증을 위해 다시 로그인 창을 띄우지 않고, Hidden iframe에서 인증 시 필요한 Redirect 처리까지 진행합니다   
+추가 팁! Access Token이 만료되어 다시 인증해서 JWT를 발급받아야 할 때는 Cookie에 로그인 Session 정보를 담아두어서 사용해야 합니다   
+(보통 SPA에는 Refresh Token을 제공하지 않습니다. Refresh Token이 있으면 Access Token을 영원히 갱신할 수 있기 때문입니다)  
+
+- 이유   
+1.Local Storage에 JWT를 저장하지 않으면 사용자가 브라우저를 껐다 켤 때 마다 로그인을 다시 해야 합니다   
+2.하지만 로그인에 Cookie를 사용하면 사용자를 방해하지 않고도 (UX 중단 없이, 재-로그인 없이) JWT를 재발급받을 수 있습니다   
+3.게다가 Cookie는 자바스크립트에서 접근을 못하도록 보안 설정이 가능합니다  
+   
+### 로그아웃 🔓   
+간단하게 저장해둔 JWT를 삭제하면 됩니다. 이제 Client가 서버에 로그아웃을 요청할 필요가 없습니다!   
++ 서버에서 블랙리스트를 관리하여 JWT를 만료시키는 방법도 있습니다.   
+
 ## JWT 의 보안적 문제들
 ### 1.토큰 내 중요한 정보 노출
 일단 가장 흔한 경우는 이 토큰을 만들기 위해 사용되는 데이터들입니다   
@@ -123,7 +173,7 @@ Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 
 아래 샘플은 jwt 공식 홈(https://jwt.io/) 에서 제공되는 기본 sample 코드입니다   
 여기서 보아도 payload 데이터에 admin을 의미하는 값이 들어있습니다   
 ![선택 영역_015](https://user-images.githubusercontent.com/41939976/89480633-d0888a00-d7d0-11ea-823b-9ab3655193ef.png)   
-
+   
 ## JWT 취약점에 따른 보안법
 사용자의 상태를 유지하지 않는 stateless한 서비스를 운영할 때는 보안 이슈가 문제가 됩니다. 이를 해결하기 위한 보안 솔루션 중 하나가 JSON Web Token입니다.   
 이를 이용해서 보안 정책을 세우는 경우 토큰 관리에 여러 전략을 이용 할 수 있습니다.   
