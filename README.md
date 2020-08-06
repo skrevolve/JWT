@@ -7,29 +7,30 @@ JWT는 속성정보(claim)를 JSON 데이터 구조로 표현한 토큰이다
 http Request 헤더에 JSON 토큰을 넣은 후 서버는 별도의 인증없이 헤더에 포함되 있는 JWT정보를 통해 인증한다    
 JSON데이터는 URL-safe 하도록 URL에 포함할 수 있는 문자만으로 만든다   
 JWT는 HMAC알고리즘을 사용하여 비밀키  또는 RSA를 이용한 Public Key/Private Key 쌍으로 서명할 수 있다   
-
+<br/>
 ## JWT와 관련된 표준
 ![900_JWS_JWE_Banner](https://user-images.githubusercontent.com/41939976/89265820-08c48700-d670-11ea-961d-80113bc990e6.png)
-   
+<br/>
 ### JWS(Signature)   
 - JSON데이터 구조를 사용하는 서명표준   
-- JWS는 JSON으로 전자서명하여 URL-safe 문자열로 표현한 것이다
-   
+- JWS는 JSON으로 전자서명하여 URL-safe 문자열로 표현한 것이다   
+<br/>
 ### JWE(Encryption)   
 - JSON데이터 구조를 사용하는 암호화 방법      
-- JWE는 JSON으로 암호화하여 URL-safe 문자열로 표현한 것이다
-   
+- JWE는 JSON으로 암호화하여 URL-safe 문자열로 표현한 것이다   
+<br/>
 ### URL-safe란?
 - URL에 포함될 수 없는 문자를 포함하지 않는 것
-
+<br/>
 ### Signature란?
 - 서명할때 사용한 키를 사용하여 JSON이 손상되지 않았는지 확인 하는 것
-
+<br/>
 ## JWT 토큰 구성
 ![json-web-token-overview1](https://user-images.githubusercontent.com/41939976/89266708-38c05a00-d671-11ea-812a-c0a3918a02df.png)
 JWT는 크게 .으로 구분하여 3 파트로 나뉘어 진다 (Header,Payload,Signature)
 
-JWT에서 토큰은 헤더와 Payload로 나눠짐   
+JWT에서 토큰은 헤더와 Payload로 나눠짐  
+
 Header: 암호화 알고리즘 및 Type을 의미함   
 {   
   "alg":"HS256",//알고리즘   
@@ -43,14 +44,11 @@ Payload : 전송할 내용
   "auth":"nomal_user"//관리자역할여부   
 }   
 
-Signature 영역   
+Signature : 전송된 내용 확인    
 //헤더 영역과 데이터 영역을 결합한 데이터를 서버 비밀키(SecretKey)를 통해 HMAC알고리즘으로 암호화합니다.    
 HMACSHA256(base64UrlEncode(header)+"."+base64UrlEncode(payload),KEY)   
-
-헤더 내용 중 alg는 보안 알고리즘, typ는 type을 의미합니다.
-alg는 HS256 외 다수의 알고리즘을 지원합니다.
-
-이렇게 지정한 데이터는 인코딩 과정을 거쳐 아래와 같은 Token으로 변환되어 사용됩니다.
+<br/>  
+이렇게 지정한 데이터는 인코딩 과정을 거쳐 아래와 같은 Token으로 변환되어 사용됩니다   
 
 #### URL과 URI의 차이
 - URL > URI 구조
