@@ -100,6 +100,15 @@ JWT에는 필요한 모든 정보를 토큰에 포함하기 때문에 데이터�
 Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 JWT를 채용 한 인증 메커니즘은 두 도메인에서 API를 제공하더라도 문제가 발생하지 않습니다   
 일반적으로 JWT 토큰 기반의 인증 시스템은 위와 같은 프로세스로 이루어집니다   
 처음 사용자를 등록할 때 Access token과 Refresh token이 모두 발급되어야 합니다   
+
+## 인증 방식 비교하기 (Session-Cookie VS Token)
+확장성을 고려한다면 Token 인증     
+두 방식의 차이점을 확장성 측면에서 살펴보겠습니다   
+![sessionCookie1](https://user-images.githubusercontent.com/41939976/89484266-1cd7c800-d7d9-11ea-8988-4d1ede6905f9.png)
+- Stateful : 모든 사용자의 인증상태(Session)를 유지하고 있어야 함   
+- Traffic 고려 O: 사용자가 많아지면 Session 저장소가 Traffic을 감당해야 함 (조회, 등록)   
+- 공유 자원 O : Server 증설시 Session 저장소를 공유해야 함   
+
     
 ## JWT 의 보안적 문제들
 ### 1.토큰 내 중요한 정보 노출
