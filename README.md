@@ -32,17 +32,20 @@ JWT는 크게 .으로 구분하여 3 파트로 나뉘어 진다 (Header,Payload,
 JWT에서 토큰은 헤더와 Payload로 나눠짐   
 Header: 암호화 알고리즘 및 Type을 의미함   
 {   
-  "alg":"HS256",   
-  "typ":"JWT"   
+  "alg":"HS256",//알고리즘   
+  "typ":"JWT"//유형   
 }   
    
 Payload : 전송할 내용   
 {   
-  "test":0000001,   
-  "User":"TestUser1",   
-  "auth":"nomal_user"   
+  "test":0000001,//사용자고유번호   
+  "User":"TestUser1",//사용자이름   
+  "auth":"nomal_user"//관리자역할여부   
 }   
 
+Signature 영역   
+//헤더 영역과 데이터 영역을 결합한 데이터를 서버 비밀키(SecretKey)를 통해 HMAC알고리즘으로 암호화합니다.    
+HMACSHA256(base64UrlEncode(header)+"."+base64UrlEncode(payload),KEY)   
 헤더 내용 중 alg는 보안 알고리즘, typ는 type을 의미합니다.
 alg는 HS256 외 다수의 알고리즘을 지원합니다.
 
@@ -96,7 +99,7 @@ JWT에는 필요한 모든 정보를 토큰에 포함하기 때문에 데이터�
 Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 JWT를 채용 한 인증 메커니즘은 두 도메인에서 API를 제공하더라도 문제가 발생하지 않습니다   
 일반적으로 JWT 토큰 기반의 인증 시스템은 위와 같은 프로세스로 이루어집니다   
 처음 사용자를 등록할 때 Access token과 Refresh token이 모두 발급되어야 합니다   
-
+    
 ## JWT 의 보안적 문제들
 ### 1.토큰 내 중요한 정보 노출
 일단 가장 흔한 경우는 이 토큰을 만들기 위해 사용되는 데이터들입니다   
@@ -115,6 +118,7 @@ Cross-Origin Resource Sharing (CORS)는 쿠키를 사용하지 않기 때문에 
 사용자의 상태를 유지하지 않는 stateless한 서비스를 운영할 때는 보안 이슈가 문제가 됩니다. 이를 해결하기 위한 보안 솔루션 중 하나가 JSON Web Token입니다.   
 이를 이용해서 보안 정책을 세우는 경우 토큰 관리에 여러 전략을 이용 할 수 있습니다.   
 JWT가 제공하는 기본적인 AccessToken 외에 RefreshToken을 도입한다거나 Sliding Sessions 전략을 활용할 수 있는데 이에 따라 그 장/단점이 달라집니다.   
+알고리즘 때문에 위변조가 불가능하다고 하는데 불가능 하지 않습니다(https://code-machina.github.io/2019/09/01/Security-On-JSON-Web-Token.html)
 
 ----------------
 ### AccessToken 사용
@@ -178,7 +182,8 @@ RefreshToken의 만료 기간에 대한 제약을 받지 않습니다.
 
 - 단점   
 서버에서 강제로 RefreshToken을 만료하지 않는 한 지속적으로 사용이 가능합니다.   
-인증이 추가로 요구되는 경우에 대한 보안 강화가 필요합니다.   
+인증이 추가로 요구되는 경우에 대한 보안 강화가 필요합니다.    
+
 ----------------
 ### 결론
 일반적인 웹 서비스처럼 cookie등을 이용해 세션 관리를 하는 방식을 사용할 수 없는 stateless한 REST API등은 토큰 방식의 보안을 이용 할 수 밖에 없습니다. stateless하기 때문에 매 요청에 대한 인증을 거쳐야 하는데, 이는 데이터베이스 등으로부터 토큰을 얻어오는 추가적인 I/O 작업이 불가피하고 이는 성능의 하락으로 이어집니다. 이를 해결해주기 위한 솔루션이 바로 JWT입니다.   
