@@ -136,11 +136,11 @@ JWT에 모든 정보가 포함되어 있기 때문에, 개별 서비스들은 �
 ![3](https://user-images.githubusercontent.com/41939976/89491266-d343a900-d7e9-11ea-88ab-e303744ce353.png)
 
 ## JWT 사용시 주의 할 점   
-### Local Storage에 저장하지 마세요! ❌   
+### 1.Local Storage에 저장하지 마세요! ❌   
 정말 위험합니다! 아무리 데이터 암호화를 잘 해도 Token이 털리면 아무 의미가 없습니다   
 Local Storage에 저장하면 웹 브라우저에 영구적으로 저장되고, 자바스크립트를 통해 접근 가능하기 때문에 보안(특히 XSS 공격)에 취약합니다!   
 최소한 메모리에 저장해두세요. (ex. Vue.js로 SPA를 개발했다면 Vuex 사용)   
-### JWT와 Session-Cookie를 모두 사용하기   
+### 2.JWT와 Session-Cookie를 모두 사용하기   
 ![4](https://user-images.githubusercontent.com/41939976/89491429-3f261180-d7ea-11ea-9aee-43e2cbafe370.png)
 사용자의 서비스 경험을 방해하지 않고 인증을 다시 하는 방식입니다   
 재인증을 위해 다시 로그인 창을 띄우지 않고, Hidden iframe에서 인증 시 필요한 Redirect 처리까지 진행합니다   
@@ -152,7 +152,7 @@ Local Storage에 저장하면 웹 브라우저에 영구적으로 저장되고, 
 2.하지만 로그인에 Cookie를 사용하면 사용자를 방해하지 않고도 (UX 중단 없이, 재-로그인 없이) JWT를 재발급받을 수 있습니다   
 3.게다가 Cookie는 자바스크립트에서 접근을 못하도록 보안 설정이 가능합니다  
    
-### 로그아웃 🔓   
+### 3.로그아웃 🔓   
 간단하게 저장해둔 JWT를 삭제하면 됩니다. 이제 Client가 서버에 로그아웃을 요청할 필요가 없습니다!   
 + 서버에서 블랙리스트를 관리하여 JWT를 만료시키는 방법도 있습니다.   
 
