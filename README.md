@@ -46,6 +46,7 @@ Payload : 전송할 내용
 Signature 영역   
 //헤더 영역과 데이터 영역을 결합한 데이터를 서버 비밀키(SecretKey)를 통해 HMAC알고리즘으로 암호화합니다.    
 HMACSHA256(base64UrlEncode(header)+"."+base64UrlEncode(payload),KEY)   
+
 헤더 내용 중 alg는 보안 알고리즘, typ는 type을 의미합니다.
 alg는 HS256 외 다수의 알고리즘을 지원합니다.
 
