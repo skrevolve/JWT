@@ -2,11 +2,11 @@
 개념만 알고있던 JWT에 대해 공부도 되고 보안적인 문제점이 있을까 생각하는 계기가 되어 글 작성해봅니다   
 
 # JWT (JSON Web Token)
-주로 서비스에 대한 인증이나 CSRF 토큰등에 사용될 수 있겠지요
-JWT는 속성정보(claim)를 JSON 데이터 구조로 표현한 토큰이다
-http Request 헤더에 JSON 토큰을 넣은 후 서버는 별도의 인증없이 헤더에 포함되 있는 JWT정보를 통해 인증한다  
-JSON데이터는 URL-safe 하도록 URL에 포함할 수 있는 문자만으로 만든다
-JWT는 HMAC알고리즘으 사용하여 비밀키  또는 RSA를 이용한 Public Key/Private Key 쌍으로 서명할 수 있다
+주로 서비스에 대한 인증이나 CSRF 토큰등에 사용될 수 있겠지요   
+JWT는 속성정보(claim)를 JSON 데이터 구조로 표현한 토큰이다   
+http Request 헤더에 JSON 토큰을 넣은 후 서버는 별도의 인증없이 헤더에 포함되 있는 JWT정보를 통해 인증한다    
+JSON데이터는 URL-safe 하도록 URL에 포함할 수 있는 문자만으로 만든다   
+JWT는 HMAC알고리즘으 사용하여 비밀키  또는 RSA를 이용한 Public Key/Private Key 쌍으로 서명할 수 있다   
 
 ## JWT와 관련된 표준
 ![900_JWS_JWE_Banner](https://user-images.githubusercontent.com/41939976/89265820-08c48700-d670-11ea-961d-80113bc990e6.png)
