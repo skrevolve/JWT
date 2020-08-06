@@ -138,7 +138,7 @@ JWT에 모든 정보가 포함되어 있기 때문에, 개별 서비스들은 �
 ## JWT 사용시 주의 할 점   
 ### Local Storage에 저장하지 마세요! ❌   
 정말 위험합니다! 아무리 데이터 암호화를 잘 해도 Token이 털리면 아무 의미가 없습니다   
-Local Storage에 저장하면 웹 브라우저에 영구적으로 저장되고, 자바스크립트를 통해 접근 가능하기 때문에 보안(특히 Cross-Site Scripting 공격)에 취약합니다!   
+Local Storage에 저장하면 웹 브라우저에 영구적으로 저장되고, 자바스크립트를 통해 접근 가능하기 때문에 보안(특히 XSS 공격)에 취약합니다!   
 최소한 메모리에 저장해두세요. (ex. Vue.js로 SPA를 개발했다면 Vuex 사용)   
 ### JWT와 Session-Cookie를 모두 사용하기   
 ![4](https://user-images.githubusercontent.com/41939976/89491429-3f261180-d7ea-11ea-9aee-43e2cbafe370.png)
